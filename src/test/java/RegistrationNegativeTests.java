@@ -21,6 +21,7 @@ public class RegistrationNegativeTests {
 
     @BeforeClass
     public static void setUp() {
+        //Utils.setFireFox();
         RestAssured.baseURI = BASE_URL;
         registrationElements = open(REGISTRATION_URL, RegistrationElements.class);
         email = RandomStringUtils.randomAlphabetic(10) + "@mail.ru";

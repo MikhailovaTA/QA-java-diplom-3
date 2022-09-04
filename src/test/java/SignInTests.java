@@ -24,6 +24,7 @@ public class SignInTests {
 
     @BeforeClass
     public static void setUp() {
+        //Utils.setFireFox();
         RestAssured.baseURI = BASE_URL;
         email = RandomStringUtils.randomAlphabetic(10) + "@mail.ru";
         password = RandomStringUtils.randomAlphabetic(8);

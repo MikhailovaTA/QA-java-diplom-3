@@ -1,3 +1,5 @@
+import com.codeborne.selenide.Configuration;
+
 public class Utils {
     public static void await() {
         try {
@@ -5,5 +7,9 @@ public class Utils {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static void setFireFox(){
+        Configuration.browser="firefox";
     }
 }
