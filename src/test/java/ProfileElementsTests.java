@@ -1,8 +1,9 @@
+import config.RegistrationMethods;
 import io.restassured.RestAssured;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.*;
 import pageobject.MainPageElements;
-import pageobject.ProfileElements;
+import pageobject.ProfilePage;
 
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.Selenide.webdriver;
@@ -18,20 +19,17 @@ public class ProfileElementsTests {
 
     @BeforeClass
     public static void setUp() {
-        //Utils.setFireFox();
+        //utils.Utils.setFireFox();
         RestAssured.baseURI = BASE_URL;
         email = RandomStringUtils.randomAlphabetic(10) + "@mail.ru";
         password = RandomStringUtils.randomAlphabetic(8);
         name = RandomStringUtils.randomAlphabetic(8);
-        AccountUtils.registration(email, password, name);
-        Utils.await();
+        new ProfilePage().registration(email, password, name);
     }
 
     @Before
     public void login() {
-        Utils.await();
-        AccountUtils.signIn(email, password);
-        Utils.await();
+        new ProfilePage().signIn(email, password);
     }
 
     @Test
@@ -39,19 +37,6 @@ public class ProfileElementsTests {
         MainPageElements mainPageElements = open(BASE_URL, MainPageElements.class);
         mainPageElements.clickOnPersonalAreaButton();
         webdriver().shouldHave(url(ACCOUNT_PROFILE_URL));
-
-        Utils.await();
-        AccountUtils.logout();
-    }
-
-    @Test
-    public void checkLogOutProfile() {
-        MainPageElements mainPageElements = open(BASE_URL, MainPageElements.class);
-        mainPageElements.clickOnPersonalAreaButton();
-        webdriver().shouldHave(url(ACCOUNT_PROFILE_URL));
-
-        ProfileElements profileElements = open(ACCOUNT_URL, ProfileElements.class);
-        profileElements.clickLogOutButton();
     }
 
     @Test
@@ -63,9 +48,6 @@ public class ProfileElementsTests {
         mainPageElements.clickLogoButton();
 
         webdriver().shouldHave(url(BASE_URL));
-
-        Utils.await();
-        AccountUtils.logout();
     }
 
     @Test
@@ -75,27 +57,28 @@ public class ProfileElementsTests {
         mainPageElements.clickConstructorButton();
 
         webdriver().shouldHave(url(BASE_URL));
-
-        Utils.await();
-        AccountUtils.logout();
     }
 
     @Test
     public void checkGoToMenuButtonClick() {
         MainPageElements mainPageElements = open(BASE_URL, MainPageElements.class);
         mainPageElements.clickSouseButton();
-        Utils.await();
-        mainPageElements.clickFillingButton();
-        Utils.await();
-        mainPageElements.clickBunButton();
-        Utils.await();
+        mainPageElements.checkSouseText();
 
-        AccountUtils.logout();
+        mainPageElements.clickFillingButton();
+        mainPageElements.checkFillingText();
+
+        mainPageElements.clickBunButton();
+        mainPageElements.checkBunText();
+    }
+
+    @After
+    public  void logout(){
+        new ProfilePage().logout();
     }
 
     @AfterClass
     public static void clear() {
-        Utils.await();
-        AccountUtils.deleteAccount(email, password);
+         RegistrationMethods.deleteAccount(email, password);
     }
 }

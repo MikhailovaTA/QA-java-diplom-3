@@ -1,5 +1,6 @@
 package pageobject;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.support.FindBy;
@@ -10,23 +11,32 @@ import static com.codeborne.selenide.Selectors.byClassName;
 public class MainPageElements {
 
     //«Войти в аккаунт» на главной
-    @FindBy(how = How.XPATH, using = ".//*[@class='button_button__33qZ0 button_button_type_primary__1O7Bx button_button_size_large__G21Vg'][text()='Войти в аккаунт']")
-    public SelenideElement singInButtonOnMainPage;
+    @FindBy(how = How.XPATH, using = ".//*[text()='Войти в аккаунт']")
+    private SelenideElement singInButtonOnMainPage;
+
+    //кнопка Личный кабинет
+    @FindBy(how = How.XPATH, using = ".//*[text()='Личный Кабинет']")
+    private SelenideElement personalAreaButton;
+
+    @FindBy(how = How.XPATH, using = ".//*[@class='AppHeader_header__logo__2D0X2']")
+    private SelenideElement logoButton;
+
+    @FindBy(how = How.XPATH, using = ".//*[contains(@class, 'text_type')][text()='Начинки']")
+    private SelenideElement fillingText;
+
+    @FindBy(how = How.XPATH, using = ".//*[contains(@class, 'text_type')][text()='Соусы']")
+    private SelenideElement souseText;
+
+    @FindBy(how = How.XPATH, using = ".//*[contains(@class, 'text_type')][text()='Булки']")
+    private SelenideElement bunText;
 
     public void clickSingInButtonOnMainPage(){
         singInButtonOnMainPage.click();
     }
 
-    //кнопка Личный кабинет
-    @FindBy(how = How.XPATH, using = ".//*[@class='AppHeader_header__linkText__3q_va ml-2'][text()='Личный Кабинет']")
-    public SelenideElement personalAreaButton;
-
     public void clickOnPersonalAreaButton(){
         personalAreaButton.click();
     }
-
-    @FindBy(how = How.XPATH, using = ".//*[@class='AppHeader_header__logo__2D0X2']")
-    public SelenideElement logoButton;
 
     public void clickLogoButton(){
         logoButton.click();
@@ -46,5 +56,17 @@ public class MainPageElements {
 
     public void clickFillingButton(){
         Selenide.$$(byClassName("tab_tab__1SPyG")).get(2).click();
+    }
+
+    public void checkFillingText(){
+        fillingText.shouldBe(Condition.visible);
+    }
+
+    public void checkSouseText(){
+        souseText.shouldBe(Condition.visible);
+    }
+
+    public void checkBunText(){
+        bunText.shouldBe(Condition.visible);
     }
 }

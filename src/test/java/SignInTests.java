@@ -1,15 +1,12 @@
-import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.ObjectCondition;
-import config.DataUser;
 import config.RegistrationMethods;
 import io.restassured.RestAssured;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.http.HttpStatus;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import pageobject.*;
+import pageobject.ProfilePage;
 
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.Selenide.webdriver;
@@ -24,13 +21,13 @@ public class SignInTests {
 
     @BeforeClass
     public static void setUp() {
-        //Utils.setFireFox();
+        //utils.Utils.setFireFox();
         RestAssured.baseURI = BASE_URL;
         email = RandomStringUtils.randomAlphabetic(10) + "@mail.ru";
         password = RandomStringUtils.randomAlphabetic(8);
         name = RandomStringUtils.randomAlphabetic(8);
-        AccountUtils.registration(email, password, name);
-        Utils.await();
+        new ProfilePage().registration(email, password, name);
+
     }
 
     @Test
@@ -39,14 +36,16 @@ public class SignInTests {
         mainPageElements.clickSingInButtonOnMainPage();
         webdriver().shouldHave(url(SIGH_IN_URL));
 
-        SingInElements singInElements = open(SIGH_IN_URL, SingInElements.class);
-        singInElements.login(email, password);
+        SignInElements signInElements = open(SIGH_IN_URL, SignInElements.class);
+        signInElements.login(email, password);
+        webdriver().shouldHave(url(BASE_URL));
     }
 
     @Test
     public void singInPersonalArea() {
-        SingInElements singInElements = open(SIGH_IN_URL, SingInElements.class);
-        singInElements.login(email, password);
+        SignInElements signInElements = open(SIGH_IN_URL, SignInElements.class);
+        signInElements.login(email, password);
+        webdriver().shouldHave(url(BASE_URL));
     }
 
     @Test
@@ -55,8 +54,10 @@ public class SignInTests {
         registrationElements.clickSingInButton();
         webdriver().shouldHave(url(SIGH_IN_URL));
 
-        SingInElements singInElements = open(SIGH_IN_URL, SingInElements.class);
-        singInElements.login(email, password);
+        SignInElements signInElements = open(SIGH_IN_URL, SignInElements.class);
+        signInElements.login(email, password);
+        webdriver().shouldHave(url(BASE_URL));
+
     }
 
     @Test
@@ -65,20 +66,19 @@ public class SignInTests {
         passwordRecoveryElements.clickSingInButton();
         webdriver().shouldHave(url(SIGH_IN_URL));
 
-        SingInElements singInElements = open(SIGH_IN_URL, SingInElements.class);
-        singInElements.login(email, password);
+        SignInElements signInElements = open(SIGH_IN_URL, SignInElements.class);
+        signInElements.login(email, password);
+        webdriver().shouldHave(url(BASE_URL));
     }
 
     @After
     public void checkAndLogout() {
-        Utils.await();
-        AccountUtils.checkIsSignedIn();
-        AccountUtils.logout();
-        Utils.await();
+        new ProfilePage().checkIsSignedIn();
+        new ProfilePage().logout();
     }
 
     @AfterClass
     public static void clear() {
-        AccountUtils.deleteAccount(email, password);
+         RegistrationMethods.deleteAccount(email, password);
     }
 }

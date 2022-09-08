@@ -4,41 +4,33 @@ import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 
-import java.nio.charset.Charset;
+import static com.codeborne.selenide.Condition.text;
 
 public class RegistrationElements {
 
-    //кнопка Войти в аккаунт
-    @FindBy(how = How.CLASS_NAME, using = "button_button__33qZ0 button_button_type_primary__1O7Bx button_button_size_large__G21Vg")
-    public SelenideElement signInButton;
-
     //кнопка Зарегистрироваться
-    @FindBy(how = How.XPATH, using = ".//*[@class='button_button__33qZ0 button_button_type_primary__1O7Bx button_button_size_medium__3zxIa']")
-    public SelenideElement registrationButton;
+    @FindBy(how = How.XPATH, using = ".//*[contains(@class, 'button_button__33qZ0')]")
+    private SelenideElement registrationButton;
 
     //поле Имя
-    @FindBy(how = How.XPATH, using = ".//*[@class='input__placeholder text noselect text_type_main-default'][text()='Имя']")
-    public SelenideElement nameField;
+    @FindBy(how = How.XPATH, using = ".//*[contains(@class, 'input__placeholder')][text()='Имя']")
+    private SelenideElement nameField;
 
     //поле Email
-    @FindBy(how = How.XPATH, using = ".//*[@class='input__placeholder text noselect text_type_main-default'][text()='Email']")
-    public SelenideElement emailField;
+    @FindBy(how = How.XPATH, using = ".//*[contains(@class, 'input__placeholder')][text()='Email']")
+    private SelenideElement emailField;
 
     //поле Пароль
-    @FindBy(how = How.XPATH, using = ".//*[@class='text input__textfield text_type_main-default'][@type='password']")
-    public SelenideElement passwordField;
-
-    //кнопка Зарегистрироваться на форме регистрации
-    @FindBy(how = How.XPATH, using = ".//*[@class='button_button__33qZ0 button_button_type_primary__1O7Bx button_button_size_medium__3zxIa'][text()='Зарегистрироваться']")
-    public SelenideElement registrationButtonInRegistrationForm;
+    @FindBy(how = How.XPATH, using = ".//*[contains(@class, 'input__textfield')][@type='password']")
+    private SelenideElement passwordField;
 
     //Ошибка при неверном пароле
-    @FindBy(how = How.XPATH, using = ".//*[@class='input__error text_type_main-default'][text()='Некорректный пароль']")
-    public SelenideElement errorMessage;
+    @FindBy(how = How.XPATH, using = ".//*[contains(@class, 'input__error')][text()='Некорректный пароль']")
+    private SelenideElement errorMessage;
 
     //кнопка Войти в разделе регистрации
-    @FindBy(how = How.XPATH, using = ".//*[@class='Auth_link__1fOlj'][text()='Войти']")
-    public SelenideElement goToSignIn;
+    @FindBy(how = How.XPATH, using = ".//*[contains(@class, 'Auth_link')][text()='Войти']")
+    private SelenideElement goToSignIn;
 
     public void setEmail(String email) {
         emailField.parent().lastChild().setValue(email);
@@ -67,4 +59,7 @@ public class RegistrationElements {
         clickRegistrationButton();
     }
 
+    public void checkErrorMessage(String errorText){
+        errorMessage.shouldHave(text(errorText));
+    }
 }

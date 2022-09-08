@@ -8,7 +8,7 @@ public class PasswordRecoveryElements {
 
     //кнопка Войти
     @FindBy(how = How.XPATH, using = ".//*[@class='Auth_link__1fOlj'][text()='Войти']")
-    public SelenideElement goToSignIn;
+    private SelenideElement goToSignIn;
 
     public void clickSingInButton() {
         goToSignIn.click();

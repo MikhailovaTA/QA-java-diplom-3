@@ -1,14 +1,11 @@
-import config.DataUser;
 import config.RegistrationMethods;
 import io.restassured.RestAssured;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.http.HttpStatus;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import pageobject.RegistrationElements;
 
-import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.open;
 import static config.Url.BASE_URL;
 import static config.Url.REGISTRATION_URL;
@@ -21,7 +18,7 @@ public class RegistrationNegativeTests {
 
     @BeforeClass
     public static void setUp() {
-        //Utils.setFireFox();
+        //utils.Utils.setFireFox();
         RestAssured.baseURI = BASE_URL;
         registrationElements = open(REGISTRATION_URL, RegistrationElements.class);
         email = RandomStringUtils.randomAlphabetic(10) + "@mail.ru";
@@ -32,6 +29,11 @@ public class RegistrationNegativeTests {
     @Test
     public void checkErrorRegistration(){
         registrationElements.login(email, password, name);
-        registrationElements.errorMessage.shouldHave(text("Некорректный пароль"));
+        registrationElements.checkErrorMessage("Некорректный пароль");
+    }
+
+    @AfterClass
+    public static void clear() {
+         RegistrationMethods.deleteAccount(email, password);
     }
 }
