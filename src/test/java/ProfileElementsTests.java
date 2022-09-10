@@ -60,16 +60,17 @@ public class ProfileElementsTests {
     }
 
     @Test
-    public void checkGoToMenuButtonClick() {
+    public void checkGoToMenuButtonClick(){
         MainPageElements mainPageElements = open(BASE_URL, MainPageElements.class);
         mainPageElements.clickSouseButton();
-        mainPageElements.checkSouseText();
+        mainPageElements.checkSouseClicked();
+
 
         mainPageElements.clickFillingButton();
-        mainPageElements.checkFillingText();
+        mainPageElements.checkFillingClicked();
 
         mainPageElements.clickBunButton();
-        mainPageElements.checkBunText();
+        mainPageElements.checkBunClicked();
     }
 
     @After

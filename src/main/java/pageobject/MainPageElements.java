@@ -1,12 +1,16 @@
 package pageobject;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 
+import static com.codeborne.selenide.CollectionCondition.size;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.byClassName;
+import static com.codeborne.selenide.Selectors.byXpath;
 
 public class MainPageElements {
 
@@ -21,13 +25,13 @@ public class MainPageElements {
     @FindBy(how = How.XPATH, using = ".//*[@class='AppHeader_header__logo__2D0X2']")
     private SelenideElement logoButton;
 
-    @FindBy(how = How.XPATH, using = ".//*[contains(@class, 'text_type')][text()='Начинки']")
+    @FindBy(how = How.XPATH, using = ".//*[contains(@class, 'text_type_main-medium')][text()='Начинки']")
     private SelenideElement fillingText;
 
-    @FindBy(how = How.XPATH, using = ".//*[contains(@class, 'text_type')][text()='Соусы']")
+    @FindBy(how = How.XPATH, using = ".//*[contains(@class, 'text_type_main-medium')][text()='Соусы']")
     private SelenideElement souseText;
 
-    @FindBy(how = How.XPATH, using = ".//*[contains(@class, 'text_type')][text()='Булки']")
+    @FindBy(how = How.XPATH, using = ".//*[contains(@class, 'text_type_main-medium')][text()='Булки']")
     private SelenideElement bunText;
 
     public void clickSingInButtonOnMainPage(){
@@ -47,26 +51,43 @@ public class MainPageElements {
     }
 
     public void clickBunButton(){
-        Selenide.$$(byClassName("tab_tab__1SPyG")).get(0).click();
+        clickTabButton("Булки");
     }
 
     public void clickSouseButton(){
-        Selenide.$$(byClassName("tab_tab__1SPyG")).get(1).click();
+        clickTabButton("Соусы");
     }
 
     public void clickFillingButton(){
-        Selenide.$$(byClassName("tab_tab__1SPyG")).get(2).click();
+        clickTabButton("Начинки");
     }
 
-    public void checkFillingText(){
-        fillingText.shouldBe(Condition.visible);
+    public void checkFillingClicked(){
+        fillingText.shouldBe(visible);
+        checkTabClicked("Начинки");
     }
 
-    public void checkSouseText(){
-        souseText.shouldBe(Condition.visible);
+    public void checkSouseClicked(){
+        souseText.shouldBe(visible);
+        checkTabClicked("Соусы");
     }
 
-    public void checkBunText(){
-        bunText.shouldBe(Condition.visible);
+    public void checkBunClicked(){
+        bunText.shouldBe(visible);
+        checkTabClicked("Булки");
+    }
+
+    private void clickTabButton(String text){
+        Selenide.$(byXpath(".//*[contains(@class, 'text_type_main')][text()='"+text+"']"))
+            .parent()
+            .shouldNotHave(cssClass("tab_tab_type_current__2BEPc"))
+            .click();
+    }
+
+    private void checkTabClicked(String text){
+        Selenide.$(byXpath(".//*[contains(@class, 'text_type_main')][text()='"+text+"']"))
+            .parent()
+            .shouldHave(cssClass("tab_tab_type_current__2BEPc"));
+        Selenide.$$(byClassName("tab_tab_type_current__2BEPc")).shouldHave(size(1));
     }
 }
